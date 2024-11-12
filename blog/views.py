@@ -9,7 +9,7 @@ class PostList(generic.ListView):
     template_name = "blog/index.html" #use this to change template name
     paginate_by = 6 # displays six posts at a time
 
-def post_detail(request, slug):
+def post_detail(request, slug): # looking for the exact blog post clicked on. The slug is passed in to help Django
     """
     Display an individual :model:`blog.Post`.
 
@@ -22,10 +22,10 @@ def post_detail(request, slug):
 
     :template:`blog/post_detail.html`
     """
-    queryset = Post.objects.filter(status=1)
-    post = get_object_or_404(queryset, slug=slug)
+    queryset = Post.objects.filter(status=1) # looking for published posts
+    post = get_object_or_404(queryset, slug=slug) # if Django can't find the post, 404 error
 
-    return render(
+    return render( # if the post is found, we use the following template (post_detail.html)
         request,
         "blog/post_detail.html",
         {"post": post},
