@@ -10,5 +10,6 @@ class PostAdmin(SummernoteModelAdmin):
     prepopulated_fields = {'slug': ('title',)} # In the prepopulated_fields, the tuple containing the single value of title requires a trailing comma.
     summernote_fields = ('content',)
 
+
 # Register your models here.
 admin.site.register(Comment)
