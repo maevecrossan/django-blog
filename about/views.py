@@ -2,7 +2,7 @@ from django.shortcuts import render
 from .models import About
 
 # Create your views here.
-def about_me(request, content):
+def about_me(request):
     """
     Renders the About page
     """
