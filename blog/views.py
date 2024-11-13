@@ -1,13 +1,17 @@
 from django.shortcuts import render, get_object_or_404
 from django.views import generic
+from django.contrib import messages
 from .models import Post
+from .forms import CommentForm
 
 # Create your views here.
+
 
 class PostList(generic.ListView):
     queryset = Post.objects.filter(status=1) #applies filter to database  
     template_name = "blog/index.html" #use this to change template name
     paginate_by = 6 # displays six posts at a time
+
 
 def post_detail(request, slug): # looking for the exact blog post clicked on. The slug is passed in to help Django
     """
@@ -26,12 +30,26 @@ def post_detail(request, slug): # looking for the exact blog post clicked on. Th
     post = get_object_or_404(queryset, slug=slug) # if Django can't find the post, 404 error
     comments = post.comments.all().order_by("-created_on")
     comment_count = post.comments.filter(approved=True).count()
+    if request.method == "POST":
+        comment_form = CommentForm(data=request.POST)
+        if comment_form.is_valid():
+            comment = comment_form.save(commit=False)
+            comment.author = request.user
+            comment.post = post
+            comment.save()
+            messages.add_message(
+                request, message.SUCCESS,
+                'Comment submitted and awaiting approval'
+            )
+
+    comment_form = CommentForm()
 
     return render( # if the post is found, we use the following template (post_detail.html)
         request,
         "blog/post_detail.html",
         {"post": post,
         "comments": comments,
-        "comment_count": comment_count
+        "comment_count": comment_count,
+        "comment_form": comment_form,
         },
     )
