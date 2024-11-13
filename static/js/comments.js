@@ -1,5 +1,5 @@
 const editButtons = document.getElementsByClassName("btn-edit");
-const commentText = document.getElementById("id_body");
+const commentText = document.getElementById("id_body"); // id_body created by browser from {{ comment_form | crispy }} (Can be seen in dev tools)
 const commentForm = document.getElementById("commentForm");
 const submitButton = document.getElementById("submitButton");
 

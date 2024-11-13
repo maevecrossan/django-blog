@@ -65,7 +65,7 @@ def comment_edit(request, slug, comment_id): # returns you to the post webpage a
         queryset = Post.objects.filter(status=1)
         post = get_object_or_404(queryset, slug=slug)
         comment = get_object_or_404(Comment, pk=comment_id)
-        comment_form = CommentForm(data=request.POST, instance=comment)
+        comment_form = CommentForm(data=request.POST, instance=comment) # By specifying instance=comment, any changes made to the form will be applied to the existing Comment, instead of creating a new one.
 
         if comment_form.is_valid() and comment.author == request.user:
             comment = comment_form.save(commit=False)
@@ -76,7 +76,7 @@ def comment_edit(request, slug, comment_id): # returns you to the post webpage a
         else:
             messages.add_message(request, messages.ERROR, 'Error updating comment!')
 
-    return HttpResponseRedirect(reverse('post_detail', args=[slug]))
+    return HttpResponseRedirect(reverse('post_detail', args=[slug])) # returns user to the relevant blog post. Using the slug argument ensures the user is returned to the same blog post on which they edited or deleted a comment.
 
 
 def comment_delete(request, slug, comment_id):
@@ -87,7 +87,7 @@ def comment_delete(request, slug, comment_id):
     post = get_object_or_404(queryset, slug=slug)
     comment = get_object_or_404(Comment, pk=comment_id)
 
-    if comment.author == request.user:
+    if comment.author == request.user: # defensive: view implements a further check in the back-end, which cannot be manipulated from the browser
         comment.delete()
         messages.add_message(request, messages.SUCCESS, 'Comment deleted!')
     else:
