@@ -24,9 +24,14 @@ def post_detail(request, slug): # looking for the exact blog post clicked on. Th
     """
     queryset = Post.objects.filter(status=1) # looking for published posts
     post = get_object_or_404(queryset, slug=slug) # if Django can't find the post, 404 error
+    comments = post.comments.all().order_by("-created_on")
+    comment_count = post.comments.filter(approved=True).count()
 
     return render( # if the post is found, we use the following template (post_detail.html)
         request,
         "blog/post_detail.html",
-        {"post": post},
+        {"post": post,
+        "comments": comments,
+        "comment_count": comment_count
+        },
     )
