@@ -23,10 +23,10 @@ class Post(models.Model):
 
 class Comment(models.Model):
     post = models.ForeignKey(
-        Post, on_delete=models.CASCADE, related_name='comments'
+        Post, on_delete=models.CASCADE, related_name='comments' # sets up a logical link to Comment model via 'comments'
     )
     author = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name='commenter'
+        User, on_delete=models.CASCADE, related_name='commenter' # sets up logical link to (built-in) User model via 'commenter'
     )
     body = models.TextField()
     approved = models.BooleanField(default=False)
